@@ -2,10 +2,14 @@ SHELL := /bin/bash
 
 ALL:
 
-edit:
-	vim -c "set filetype=beancount" main.gpg
-
 de:
-	gpg --decrypt main.gpg 2>/dev/null > main.beancount
-	-@PROMPT_COMMAND="PS1=`echo 'safemode$$ '`" bash --norc --noprofile
-	shred -u main.beancount
+	@for i in `ls *.gpg` ; do \
+		prefix=$${i%%".gpg"} ;\
+		cat $$i | gpg --decrypt > $$prefix.beancount ;\
+	done
+
+en:
+	@for i in `ls *.beancount` ; do \
+		prefix=$${i%%".beancount"} ;\
+		cat $$i | gpg --default-recipient-self --armor --encrypt > $$prefix.gpg ;\
+	done
