@@ -12,4 +12,5 @@ en:
 	@for i in `ls *.beancount` ; do \
 		prefix=$${i%%".beancount"} ;\
 		cat $$i | gpg --default-recipient-self --armor --encrypt > $$prefix.gpg ;\
+		shred -u $$i ;\
 	done
