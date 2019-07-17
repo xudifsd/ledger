@@ -4,13 +4,17 @@ ALL:
 
 de:
 	@for i in `ls *.gpg` ; do \
-		prefix=$${i%%".gpg"} ;\
-		cat $$i | gpg --decrypt > $$prefix.beancount ;\
+		prefix=$${i%%".gpg"} ; \
+		if [ -e $$prefix.beancount ] ; then \
+			echo "$$prefix.beancount exist, please remove to decrypt" ; \
+		else \
+			cat $$i | gpg --decrypt > $$prefix.beancount ; \
+		fi \
 	done
 
 en:
 	@for i in `ls *.beancount` ; do \
-		prefix=$${i%%".beancount"} ;\
-		cat $$i | gpg --default-recipient-self --armor --encrypt > $$prefix.gpg ;\
-		shred -u $$i ;\
+		prefix=$${i%%".beancount"} ; \
+		cat $$i | gpg --default-recipient-self --armor --encrypt > $$prefix.gpg ; \
+		shred -u $$i ; \
 	done
