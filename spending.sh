@@ -1,8 +1,9 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ] ; then
-    echo "Usage $0 bean-file" >&2
-    exit 1
+if [ "$#" -eq 1 ] ; then
+    path=$1
+else
+    path=main.beancount
 fi
 
 # This script will display all spending from begining,
@@ -10,13 +11,9 @@ fi
 # So the number means without salary how my finance performing, negative means
 # I earned more, positive means I spend more.
 
-cat << EOF | bean-query $1
+cat << EOF | bean-query $path
 SELECT year, month, currency, cost(sum(position)) as spending
-WHERE account ~ "Expenses:(?!Gov)"
-  OR (account ~ "Income:"
-      AND account != "Income:MS:Salary"
-      AND account != "Income:MS:StateDeduction")
-  AND month > 3
+WHERE (NOT 'payslip' IN tags) AND (account ~ "Expenses:*" OR account ~ "Income:*")
 GROUP BY year, month, currency
 ORDER by year, month, currency
 EOF
