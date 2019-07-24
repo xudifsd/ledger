@@ -18,7 +18,14 @@ if [ $ret -ne 0 ]; then
 fi
 
 for file in `ls *.gpg` ; do
-    colordiff -u \
-        <(git show $rev:$file | gpg --decrypt 2>/dev/null) \
-        <(cat $file | gpg --decrypt 2>/dev/null)
+    prefix=${file%%".gpg"} ; \
+    if [ -f $prefix.beancount ] ; then
+        colordiff -u \
+            <(cat $file | gpg --decrypt 2>/dev/null) \
+            <(cat $prefix.beancount)
+    else
+        colordiff -u \
+            <(git show $rev:$file | gpg --decrypt 2>/dev/null) \
+            <(cat $file | gpg --decrypt 2>/dev/null)
+    fi
 done | less -R
