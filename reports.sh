@@ -39,6 +39,11 @@ investing() {
     GROUP BY year, month
     ORDER by year, month
 EOF
+echo
+    cat << EOF | bean-query $path
+    SELECT COST(sum(position)) as total_profit
+    WHERE (account = "Income:Investing:Tiger:PnL" OR account = "Expenses:Investing:Tiger:Fees")
+EOF
 }
 
 usage="Usage: $0 [spending|holding|investing]"
