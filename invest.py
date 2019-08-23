@@ -10,34 +10,39 @@ log = logging.getLogger(__name__)
 def format_time(date):
     return date.strftime("%Y-%m-%d")
 
+def to_valid_commodity(s):
+    return s + "_S" if len(s) == 1 else s
+
 def buy(args):
     template = """
-%s * "Bought %s"
+%s * "Bought %s" #%s
     Assets:Investing:Tiger:Cash    -%.2f USD
     Assets:Investing:Tiger:Stock    %d %s {%.2f USD}
     Expenses:Investing:Tiger:Fees   %.2f USD
-    """
+"""
     cash = args.quantity * args.cost + args.fee
+
     print(template % (
-        args.date, args.symbol,
+        args.date, args.symbol, args.symbol,
         cash,
-        args.quantity, args.symbol, args.cost,
+        args.quantity, to_valid_commodity(args.symbol), args.cost,
         args.fee))
 
 def sell(args):
     template = """
-%s * "Sold %s"
+%s * "Sold %s" #%s
     Assets:Investing:Tiger:Cash     %.2f USD
     Assets:Investing:Tiger:Stock   -%d %s {%.2f USD} @ %.2f USD
     Expenses:Investing:Tiger:Fees   %.2f USD
     Income:Investing:Tiger:PnL      %.2f USD
-    """
+"""
     cash = args.quantity * args.cost - args.fee
-    pnl = (args.price - args.cost) * args.quantity # TODO
+    pnl = (args.price - args.cost) * args.quantity
+
     print(template % (
-        args.date, args.symbol,
+        args.date, args.symbol, args.symbol,
         cash,
-        args.quantity, args.symbol, args.price, args.cost,
+        args.quantity, to_valid_commodity(args.symbol), args.price, args.cost,
         args.fee,
         pnl))
 

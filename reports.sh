@@ -34,10 +34,17 @@ EOF
 
 investing() {
     cat << EOF | bean-query $path
+    SELECT tags AS symbol, COST(sum(position)) AS profit
+    WHERE (account = "Income:Investing:Tiger:PnL" OR account = "Expenses:Investing:Tiger:Fees")
+    GROUP BY symbol
+    ORDER BY profit
+EOF
+echo
+    cat << EOF | bean-query $path
     SELECT year, month, COST(sum(position)) as profit
     WHERE (account = "Income:Investing:Tiger:PnL" OR account = "Expenses:Investing:Tiger:Fees")
     GROUP BY year, month
-    ORDER by year, month
+    ORDER BY year, month
 EOF
 echo
     cat << EOF | bean-query $path
