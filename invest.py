@@ -18,7 +18,7 @@ def buy(args):
 %s * "Bought %s" #%s
     Assets:Investing:Tiger:Cash    -%.2f USD
     Assets:Investing:Tiger:Stock    %d %s {%.2f USD}
-    Expenses:Investing:Tiger:Fees   %.2f USD
+    Expenses:Fee:Investing:Tiger    %.2f USD
 """
     cash = args.quantity * args.cost + args.fee
 
@@ -33,7 +33,7 @@ def sell(args):
 %s * "Sold %s" #%s
     Assets:Investing:Tiger:Cash     %.2f USD
     Assets:Investing:Tiger:Stock   -%d %s {%.2f USD} @ %.2f USD
-    Expenses:Investing:Tiger:Fees   %.2f USD
+    Expenses:Fee:Investing:Tiger    %.2f USD
     Income:Investing:Tiger:PnL      %.2f USD
 """
     cash = args.quantity * args.cost - args.fee
