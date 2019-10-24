@@ -15,6 +15,10 @@ de:
 en:
 	@for i in `ls *.beancount` ; do \
 		prefix=$${i%%".beancount"} ; \
-		cat $$i | gpg --default-recipient-self --armor --encrypt > $$prefix.gpg ; \
+		diff <(cat $$i) <(cat $$prefix.gpg | gpg --decrypt 2>/dev/null) ; \
+		result=$$? ; \
+		if [ $$result -eq 1 ] ; then \
+			cat $$i | gpg --default-recipient-self --armor --encrypt > $$prefix.gpg ; \
+		fi ; \
 		shred -u $$i ; \
 	done
