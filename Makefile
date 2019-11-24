@@ -22,3 +22,8 @@ en:
 		fi ; \
 		shred -u $$i ; \
 	done
+
+push: en
+	git add *.gpg
+	git commit -m add
+	git push origin master
