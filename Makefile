@@ -8,17 +8,17 @@ de:
 		if [ -e $$prefix.beancount ] ; then \
 			echo "$$prefix.beancount exist, please remove to decrypt" ; \
 		else \
-			cat $$i | gpg --decrypt > $$prefix.beancount ; \
+			cat $$i | gpg2 --decrypt > $$prefix.beancount ; \
 		fi \
 	done
 
 en:
 	@for i in `ls *.beancount` ; do \
 		prefix=$${i%%".beancount"} ; \
-		diff <(cat $$i) <(cat $$prefix.gpg | gpg --decrypt 2>/dev/null) ; \
+		diff <(cat $$i) <(cat $$prefix.gpg | gpg2 --decrypt 2>/dev/null) ; \
 		result=$$? ; \
 		if [ $$result -eq 1 ] ; then \
-			cat $$i | gpg --default-recipient-self --armor --encrypt > $$prefix.gpg ; \
+			cat $$i | gpg2 --default-recipient-self --armor --encrypt > $$prefix.gpg ; \
 		fi ; \
 		shred -u $$i ; \
 	done
