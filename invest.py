@@ -16,34 +16,30 @@ def to_valid_commodity(s):
 def buy(args):
     template = """
 %s * "Bought %s" #%s
-    Assets:Investing:Tiger:Cash    -%.2f USD
-    Assets:Investing:Tiger:Stock    %d %s {%.2f USD}
-    Expenses:Fee:Investing:Tiger    %.2f USD
+    Assets:Investing:Robinhood:Cash    -%.2f USD
+    Assets:Investing:Robinhood:Stock   %d %s {%.2f USD}
 """
-    cash = args.quantity * args.cost + args.fee
+    cash = args.quantity * args.cost
 
     print(template % (
         args.date, args.symbol, args.symbol,
         cash,
-        args.quantity, to_valid_commodity(args.symbol), args.cost,
-        args.fee))
+        args.quantity, to_valid_commodity(args.symbol), args.cost))
 
 def sell(args):
     template = """
 %s * "Sold %s" #%s
-    Assets:Investing:Tiger:Cash     %.2f USD
-    Assets:Investing:Tiger:Stock   -%d %s {%.2f USD} @ %.2f USD
-    Expenses:Fee:Investing:Tiger    %.2f USD
-    Income:Investing:Tiger:PnL      %.2f USD
+    Assets:Investing:Robinhood:Cash     %.2f USD
+    Assets:Investing:Robinhood:Stock   -%d %s {%.2f USD} @ %.2f USD
+    Income:Investing:Robinhood:PnL      %.2f USD
 """
-    cash = args.quantity * args.cost - args.fee
+    cash = args.quantity * args.cost
     pnl = (args.price - args.cost) * args.quantity
 
     print(template % (
         args.date, args.symbol, args.symbol,
         cash,
         args.quantity, to_valid_commodity(args.symbol), args.price, args.cost,
-        args.fee,
         pnl))
 
 def main(args):
@@ -73,8 +69,6 @@ if __name__ == '__main__':
             help="stock quantity of transcation")
     parser.add_argument("--cost", "-c", required=True, type=float,
             help="cost to buy this stock")
-    parser.add_argument("--fee", "-f", required=True, type=float,
-            help="fee of transcation")
     parser.add_argument("--price", "-p", type=float,
             help="price of bough, only used in sell action")
 
