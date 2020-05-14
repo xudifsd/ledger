@@ -32,15 +32,21 @@ def sell(args):
     Assets:Investing:Robinhood:Cash     %.2f USD
     Assets:Investing:Robinhood:Stock   -%d %s {%.2f USD} @ %.2f USD
     Income:Investing:Robinhood:PnL      %.2f USD
+%s
 """
-    cash = args.quantity * args.cost
+    cash = args.quantity * args.cost - args.fee
     pnl = (args.price - args.cost) * args.quantity
+    if args.fee != 0.0:
+        fee_line = "    Expenses:Fee:Investing:Robinhood   %.2f USD" % (args.fee)
+    else:
+        fee_line = ""
 
     print(template % (
         args.date, args.symbol, args.symbol,
         cash,
         args.quantity, to_valid_commodity(args.symbol), args.price, args.cost,
-        pnl))
+        pnl,
+        fee_line))
 
 def main(args):
     if args.date is None:
@@ -69,6 +75,8 @@ if __name__ == '__main__':
             help="stock quantity of transcation")
     parser.add_argument("--cost", "-c", required=True, type=float,
             help="cost to buy this stock")
+    parser.add_argument("--fee", "-f", default=0.0, type=float,
+            help="fee to buy this stock")
     parser.add_argument("--price", "-p", type=float,
             help="price of bough, only used in sell action")
 
