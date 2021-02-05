@@ -14,7 +14,7 @@ if [ "x$action" == "xen" ]; then
     if [ "$#" -eq 1 ] ; then
         for i in `find . -type f -regex ".*.pdf"` ; do
             prefix=${i%%".pdf"}
-            cat $i | gpg --default-recipient-self --armor --encrypt > $prefix.gpg
+            cat $i | gpg2 --recipient 1D633371CAFD6E1E46CEA746346561A8EEF40745 --armor --encrypt > $prefix.gpg
             shred -u $i
         done
     else
@@ -28,12 +28,12 @@ elif [ "x$action" == "xde" ]; then
             if [ -e $prefix.pdf ] ; then
                 echo "$prefix.pdf exist, please remove to decrypt"
             else
-                cat $i | gpg --decrypt > $prefix.pdf
+                cat $i | gpg2 --decrypt > $prefix.pdf
             fi
         done
     else
         prefix=${2%%".gpg"}
-        cat $2 | gpg --decrypt > $prefix.pdf
+        cat $2 | gpg2 --decrypt > $prefix.pdf
     fi
 else
     echo $USAGE >&2

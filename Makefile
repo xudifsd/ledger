@@ -18,7 +18,7 @@ en:
 		diff <(cat $$prefix.gpg | gpg2 --decrypt 2>/dev/null) <(cat $$i) ; \
 		result=$$? ; \
 		if [ $$result -eq 1 ] ; then \
-			cat $$i | gpg2 --default-recipient-self --armor --encrypt > $$prefix.gpg ; \
+			cat $$i | gpg2 --recipient 1D633371CAFD6E1E46CEA746346561A8EEF40745 --armor --encrypt > $$prefix.gpg ; \
 		fi ; \
 		shred -u $$i ; \
 	done
