@@ -3,7 +3,7 @@ SHELL := /bin/bash
 ALL:
 
 de:
-	@for i in `ls *.gpg` ; do \
+	@for i in `find . -type f -regex ".*.gpg" -not -path ".*/statements/*"` ; do \
 		prefix=$${i%%".gpg"} ; \
 		if [ -e $$prefix.beancount ] ; then \
 			echo "$$prefix.beancount exist, please remove to decrypt" ; \
@@ -13,7 +13,7 @@ de:
 	done
 
 en:
-	@for i in `ls *.beancount` ; do \
+	@for i in `find . -type f -regex ".*.beancount" -not -path ".*/statements/*"` ; do \
 		prefix=$${i%%".beancount"} ; \
 		diff <(cat $$prefix.gpg | gpg2 --decrypt 2>/dev/null) <(cat $$i) ; \
 		result=$$? ; \
