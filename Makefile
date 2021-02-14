@@ -24,6 +24,8 @@ en:
 	done
 
 push: en
-	git add *.gpg
+	@for i in `find . -type f -regex ".*.gpg" ` ; do \
+		git add $$i ; \
+	done
 	git commit -m add
 	git push origin master
