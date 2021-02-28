@@ -11,7 +11,7 @@ else
 fi
 
 if [ "x$action" == "xen" ]; then
-    if [ "$#" -eq 1 ] ; then
+    if [ "$#" -eq 2 ] ; then
         for i in `find . -type f -regex ".*.pdf"` ; do
             prefix=${i%%".pdf"}
             diff <(cat $i) <(cat $prefix.gpg | gpg2 --decrypt 2>/dev/null)

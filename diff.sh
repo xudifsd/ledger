@@ -17,7 +17,7 @@ if [ $ret -ne 0 ]; then
   exit 2
 fi
 
-for file in `ls *.gpg` ; do
+for file in `find . -type f -regex ".*.gpg" -not -path ".*/statements/*"` ; do
     prefix=${file%%".gpg"} ; \
     if [ -f $prefix.beancount ] ; then
         colordiff -u \
