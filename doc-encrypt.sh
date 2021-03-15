@@ -14,7 +14,7 @@ if [ "x$action" == "xen" ]; then
     if [ "$#" -eq 2 ] ; then
         for i in `find . -type f -regex ".*.pdf"` ; do
             prefix=${i%%".pdf"}
-            diff <(cat $i) <(cat $prefix.gpg | gpg2 --decrypt 2>/dev/null)
+            diff <(cat $i) <(cat $prefix.gpg 2> /dev/null| gpg2 --decrypt 2>/dev/null)
             result=$?
             if [ $result -eq 1 ] ; then
                 cat $i | gpg2 --recipient 1D633371CAFD6E1E46CEA746346561A8EEF40745 --armor --encrypt > $prefix.gpg
